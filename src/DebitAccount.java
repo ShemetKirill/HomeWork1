@@ -1,33 +1,33 @@
-public class DebitAccount extends BankAccount implements TransactionValidator{
+import java.math.BigDecimal;
 
-    public static final double LIMIT_TRANSACTION=10000;
+public class DebitAccount extends BankAccount implements TransactionValidator {
 
-    public DebitAccount(String accountNumber, double balance, String accountHolder) {
+    public static final BigDecimal LIMIT_TRANSACTION =  new BigDecimal("10000");
+
+    public DebitAccount(String accountNumber, BigDecimal balance, String accountHolder) {
         super(accountNumber, balance, accountHolder);
     }
 
     @Override
-    public void withdraw(double ammount) {
-        if(isValidate(ammount)){
-            if(isChekedBalance(balance)&&balance>ammount) {
-                balance-=ammount;
-            }
-            else {
+    public void withdraw(BigDecimal ammount) {
+        if (isValid(ammount)) {
+            if (isValidBalance(balance) && ((balance.subtract(ammount)).compareTo(BigDecimal.ZERO) >=0 )) {
+                balance=balance.subtract(ammount);
+            } else {
                 System.out.println("Недостаточно средств на балансе");
             }
-        }
-        else{
+        } else {
             System.out.printf("Невозможно выполнить транкзакцию, допустимая сумма = %.2f \n", LIMIT_TRANSACTION);
         }
     }
 
     @Override
-    public boolean isChekedBalance(double balanse) {
-        return balanse>0;
+    public boolean isValidBalance(BigDecimal balanse) {
+        return (balanse.compareTo(BigDecimal.ZERO))>0;
     }
 
     @Override
-    public boolean isValidate(double ammount) {
-        return ammount<=LIMIT_TRANSACTION;
+    public boolean isValid(BigDecimal ammount) {
+        return ammount.compareTo(LIMIT_TRANSACTION) < 0;
     }
 }

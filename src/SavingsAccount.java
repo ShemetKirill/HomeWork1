@@ -1,32 +1,35 @@
-public class SavingsAccount extends BankAccount implements IInterestBearing{
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-    public static final double PERCENT_INTEREST=0.12;
-    public SavingsAccount(String accountNumber, double balance, String accountHolder) {
+public class SavingsAccount extends BankAccount implements IInterestBearing {
+    public static final BigDecimal PERCENT_INTEREST = BigDecimal.valueOf(0.12);
+
+    public SavingsAccount(String accountNumber, BigDecimal balance, String accountHolder) {
         super(accountNumber, balance, accountHolder);
     }
 
     @Override
-    public void withdraw(double ammount) {
-        if(isChekedBalance(balance)&&balance>=ammount) {
-            balance-=ammount;
-        }
-        else {
+    public void withdraw(BigDecimal ammount) {
+        if (isValidBalance(balance) && (balance.compareTo(ammount) >= 0)) {
+            balance = balance.subtract(ammount);
+        } else {
             System.out.println("Недостаточно средств на балансе");
         }
     }
 
     @Override
-    public void deposit(double ammount) {
+    public void deposit(BigDecimal ammount) {
         super.deposit(ammount);
     }
 
     @Override
-    public boolean isChekedBalance(double balanse) {
-        return balanse>0;
+    public boolean isValidBalance(BigDecimal balanse) {
+        return balanse.compareTo(BigDecimal.ZERO) > 0;
     }
 
     @Override
     public void applyInterest() {
-        balance+=(balance*PERCENT_INTEREST)/12;
+        BigDecimal interest = balance.multiply(PERCENT_INTEREST).divide(BigDecimal.valueOf(12));
+        balance = balance.add(interest);
     }
 }

@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 public interface ITransactionFee {
-    public double applyFee(double ammount);
+    public BigDecimal applyFee(BigDecimal ammount);
 }

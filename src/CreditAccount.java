@@ -1,42 +1,49 @@
+import java.math.BigDecimal;
+
 public class CreditAccount extends BankAccount implements ITransactionFee, TransactionValidator {
+    public static final BigDecimal CREDIT_LIMIT = new BigDecimal("-5000");
+    public static final BigDecimal PERCENT_COMISSION = BigDecimal.valueOf(0.01);
+    public static final BigDecimal LIMIT_TRANSACTION = new BigDecimal("5000");
 
-    public static  final double CREDIT_LIMIT=-5000;
-    public static final double PERCENT_COMISSION=0.01;
-    public static final double LIMIT_TRANSACTION=5000;
-
-    public CreditAccount(String accountNumber, double balance, String accountHolder) {
+    public CreditAccount(String accountNumber, BigDecimal balance, String accountHolder) {
         super(accountNumber, balance, accountHolder);
     }
 
     @Override
-    public void withdraw(double ammount) {
-        if(isValidate(ammount)){
-            if(isChekedBalance(balance)&&(balance-ammount>CREDIT_LIMIT)){
-                balance= (balance-ammount);
-                System.out.printf("коммисия составила = %.2f \n", applyFee(ammount));
-            }
-            else {
-                System.out.println("Недостаточно средств на балансе");
-            }
-
-        }
-        else{
-            System.out.printf("Невозможно выполнить транкзакцию, допустимая сумма = %.2f \n", LIMIT_TRANSACTION);
+    public void withdraw(BigDecimal ammount) {
+        String errorMessage = getErrorMessage(ammount);
+        if (errorMessage == null) {
+            balance = balance.subtract(ammount);
+            System.out.printf("Комиссия составила = %.2f \n", applyFee(ammount));
+        } else {
+            System.out.println(errorMessage);
         }
     }
 
     @Override
-    public boolean isChekedBalance(double balanse) {
-        return balanse>CREDIT_LIMIT;
+    public boolean isValidBalance(BigDecimal balanse) {
+        return balanse.compareTo(CREDIT_LIMIT) > 0;
     }
 
     @Override
-    public double applyFee(double ammount) {
-        return  ammount*PERCENT_COMISSION;
+    public BigDecimal applyFee(BigDecimal ammount) {
+        return ammount.multiply(PERCENT_COMISSION);
     }
 
     @Override
-    public boolean isValidate(double ammount) {
-        return ammount<=LIMIT_TRANSACTION;
+    public boolean isValid(BigDecimal ammount) {
+        return ammount.compareTo(LIMIT_TRANSACTION) <= 0;
     }
+
+    private String getErrorMessage(BigDecimal ammount) {
+        if (!isValid(ammount)) {
+            return String.format("Невозможно выполнить транзакцию, допустимая сумма = %.2f \n", LIMIT_TRANSACTION);
+        } else if (!isValidBalance(balance)) {
+            return "Недостаточно средств на балансе";
+        } else if (balance.subtract(ammount).compareTo(CREDIT_LIMIT) <= 0) {
+            return "Недостаточно средств после учета кредитного лимита";
+        }
+        return null;
+    }
+
 }
