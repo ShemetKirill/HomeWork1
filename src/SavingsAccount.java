@@ -1,5 +1,4 @@
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class SavingsAccount extends BankAccount implements IInterestBearing {
     public static final BigDecimal PERCENT_INTEREST = BigDecimal.valueOf(0.12);

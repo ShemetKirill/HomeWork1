@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SavingsAccountTest {
     @Test
-    void withdrawTest1() {
+    void positiveWithdrawTest1() {
         BankAccount savingsAccount = new SavingsAccount("1", BigDecimal.valueOf(5000), "Kirill");
         savingsAccount.withdraw(BigDecimal.valueOf(1000));
         assertEquals(BigDecimal.valueOf(4000), savingsAccount.getBalance());
@@ -14,7 +14,7 @@ class SavingsAccountTest {
     }
 
     @Test
-    void withdrawTest2() {
+    void invalidWithdrawTest2() {
         BankAccount savingsAccount = new SavingsAccount("1",BigDecimal.valueOf(500) , "Kirill");
         savingsAccount.withdraw(BigDecimal.valueOf(5000));
         assertEquals(BigDecimal.valueOf(500), savingsAccount.getBalance());
@@ -33,4 +33,5 @@ class SavingsAccountTest {
         savingsAccount.applyInterest();
         assertEquals(new BigDecimal("505.00"), savingsAccount.getBalance());
     }
+
 }

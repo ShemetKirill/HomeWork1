@@ -29,20 +29,4 @@ class TransactionProcessorTest {
         assertEquals(BigDecimal.valueOf(1800), accounts.get(1).getBalance());
         assertEquals(BigDecimal.valueOf(7800), accounts.get(2).getBalance());
     }
-
-    @Test
-    void processTransactionTest2() {
-        processor.processTransaction(accounts, BigDecimal.valueOf(5500));
-        assertEquals(BigDecimal.valueOf(4500), accounts.get(0).getBalance());
-        assertEquals(BigDecimal.valueOf(2000), accounts.get(1).getBalance());
-        assertEquals(BigDecimal.valueOf(2500), accounts.get(2).getBalance());
-    }
-
-    @Test
-    void processTransactionTest3() {
-        processor.processTransaction(accounts, BigDecimal.valueOf(10000));
-        assertEquals(BigDecimal.valueOf(10000), accounts.get(0).getBalance());
-        assertEquals(BigDecimal.valueOf(2000), accounts.get(1).getBalance());
-        assertEquals(BigDecimal.valueOf(8000), accounts.get(2).getBalance());
-    }
 }

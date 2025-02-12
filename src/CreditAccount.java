@@ -45,5 +45,4 @@ public class CreditAccount extends BankAccount implements ITransactionFee, Trans
         }
         return null;
     }
-
 }
